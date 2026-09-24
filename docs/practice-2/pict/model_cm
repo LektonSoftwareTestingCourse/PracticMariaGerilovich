@@ -1,0 +1,11 @@
+operation:            create, read, list, update, delete, reserve, generate
+pan_format:           valid_luhn, invalid_luhn, not_found
+card_status:          ACTIVE, INACTIVE, BLOCKED, EXPIRED
+bin:                  known, unknown
+expiry_format:        valid, expired
+reserve_balance:      sufficient, exact, insufficient
+
+# Constraints
+IF [operation] <> "reserve" THEN [reserve_balance] = "sufficient";
+IF [operation] = "create" THEN [pan_format] = "valid_luhn" AND [expiry_format] <> "expired" AND [card_status] = "ACTIVE";
+IF [operation] = "generate" THEN [pan_format] = "valid_luhn" AND [expiry_format] = "valid" AND [card_status] <> "EXPIRED";
