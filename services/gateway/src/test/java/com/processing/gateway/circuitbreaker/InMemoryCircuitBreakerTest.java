@@ -13,7 +13,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class InMemoryCircuitBreakerTest {
 
     private static final String SERVICE = "authorization";
-
     private final TestClock clock = new TestClock(Instant.parse("2026-01-01T00:00:00Z"));
 
     @Test
