@@ -8,7 +8,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
-/** Sources: api-spec.md, DeclineOutcome, ErrorResponse, InternalTransactionController. */
 public final class Checks {
     private Checks() { }
 

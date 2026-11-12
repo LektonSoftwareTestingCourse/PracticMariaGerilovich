@@ -3,7 +3,6 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <!-- Independent test client: no Spring application or TestNG provider is started. -->
     <groupId>com.processing</groupId>
     <artifactId>api-tests</artifactId>
     <version>1.0.0</version>
@@ -15,7 +14,6 @@
         <awaitility.version>4.2.2</awaitility.version>
         <hamcrest.version>2.2</hamcrest.version>
         <jackson.version>2.17.2</jackson.version>
-        <api.excludedGroups>strict-contract,fault</api.excludedGroups>
     </properties>
     <dependencies>
         <dependency>
@@ -52,14 +50,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId><artifactId>maven-surefire-plugin</artifactId>
                 <version>3.5.3</version>
-                <configuration><excludedGroups>${api.excludedGroups}</excludedGroups></configuration>
             </plugin>
         </plugins>
     </build>
-    <profiles>
-        <profile>
-            <id>strict-contract</id>
-            <properties><api.excludedGroups>fault</api.excludedGroups></properties>
-        </profile>
-    </profiles>
 </project>

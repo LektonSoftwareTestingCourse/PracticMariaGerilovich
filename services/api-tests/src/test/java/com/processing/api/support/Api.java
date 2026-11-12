@@ -8,7 +8,6 @@ import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.RestAssured.given;
 
-/** HTTP addresses are configured here only; system properties override environment variables. */
 public final class Api {
     public static final RequestSpecification GATEWAY = spec("gateway", 8080);
     public static final RequestSpecification CARDS = spec("cards", 8081);

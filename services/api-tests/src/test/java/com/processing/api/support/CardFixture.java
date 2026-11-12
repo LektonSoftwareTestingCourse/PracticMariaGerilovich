@@ -24,7 +24,6 @@ public final class CardFixture {
                 .then().statusCode(200).body("pan", equalTo(pan));
     }
 
-    /** Read directly to avoid a stale gateway cache after reserve/rollback. */
     public static Response read(String pan) {
         return Api.request(Api.CARDS).when().get("/api/cards/{pan}", pan);
     }
