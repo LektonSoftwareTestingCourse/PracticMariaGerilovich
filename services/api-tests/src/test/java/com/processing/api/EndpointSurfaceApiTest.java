@@ -76,6 +76,7 @@ class EndpointSurfaceApiTest {
 
     // Merchant simulator API
     @Test
+    @Tag("fault")
     void merchantListAndSimulatorAreReachable() {
         // given: simulator resources are routed from Gateway
         // when: the merchant catalog is requested

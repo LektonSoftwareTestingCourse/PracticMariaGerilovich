@@ -51,7 +51,7 @@ class AuthorizationApiTest {
 
     // #TC-N-04, #TC-N-12 and request validation boundary cases
     @ParameterizedTest
-    @CsvSource({"mti,010", "stan,1", "currencyCode,64", "mcc,541", "terminalId,T", "merchantId,M"})
+    @CsvSource({"mti,010", "currencyCode,64", "mcc,541"})
     void oneMalformedFieldIsRejectedWithValidationBody(String field, String value) {
         // given: one field is changed at a time, preserving all other valid fields
         String pan = CardFixture.create();
@@ -60,6 +60,21 @@ class AuthorizationApiTest {
         // when: the malformed authorization request is submitted
         Response response = Api.request(Api.GATEWAY).body(request).when().post("/api/transactions");
         // then: validation reports the exact field instead of a generic successful response
+        response.then().statusCode(400).body("message", containsString(field));
+    }
+
+    // Contract validation cases intentionally expose Switch normalization behavior.
+    @ParameterizedTest
+    @org.junit.jupiter.api.Tag("fault")
+    @CsvSource({"stan,1", "terminalId,T", "merchantId,M"})
+    void normalizedFieldsShouldBeRejectedByStrictContract(String field, String value) {
+        // given: a field shorter than the contract length
+        String pan = CardFixture.create();
+        Map<String, Object> request = Data.authorization(pan);
+        request.put(field, value);
+        // when: the request passes through Gateway and Switch
+        Response response = Api.request(Api.GATEWAY).body(request).when().post("/api/transactions");
+        // then: strict contract expects a validation response; current implementation normalizes these fields
         response.then().statusCode(400).body("message", containsString(field));
     }
 

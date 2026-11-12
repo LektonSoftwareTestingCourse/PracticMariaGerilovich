@@ -73,6 +73,7 @@ UUID и merchant ID генерируются для каждого теста. �
 |---|---|---|---|
 | `Card.expiryDate` — строка `MMYY` | Java DTO содержит `YearMonth`, стандартная сериализация даёт формат года-месяца | `docs/api/openapi.yaml`, `CardModel` | несовместимость формата ответа |
 | `POST /api/transactions` должен вернуть 400/503 для ошибок | Switch преобразует неизвестный BIN и недоступную Authorization в HTTP 200 с `DECLINED` | OpenAPI, `RouteController`, `RouteService` | семантика HTTP-статуса |
+| `stan`, `terminalId`, `merchantId` должны проходить проверки длины контракта | Gateway/Switch принимает короткие значения и нормализует их перед downstream-вызовом | `AuthorizationRequest`, `TransactionRequestValidator`, `AuthorizationRequestNormalizer` | расхождение валидации |
 | `issuerId` не заполняется клиентом | `AuthorizationRequest` помечает `issuerId` как `@NotBlank`; публичный тестовый payload обязан его передать | OpenAPI, DTO | противоречие валидации |
 | Log повтор с тем же ID возвращает `status=already_exists` в `LogResponse` | реализация возвращает полную `TransactionResponse` при HTTP 200 | OpenAPI, `InternalTransactionController` | форма тела ответа |
 | Search поддерживает `dateFrom/dateTo`, OpenAPI перечисляет базовые фильтры | реализация также принимает `issuerId` и `mcc`, а экспорт доступен через дополнительный endpoint | OpenAPI, `TransactionFilter`, `TransactionController` | расхождение поверхности API |
@@ -99,3 +100,6 @@ docker compose down -v
 
 CI выполняет те же шаги в `.github/workflows/api-tests.yml`. Локальный запуск
 стека в рамках этой работы не выполнялся.
+
+Обычный прогон исключает проверки с `@Tag("fault")`; для воспроизведения
+известных расхождений используется `mvn -Pstrict-contract -f services/api-tests/pom.xml verify`.

@@ -3,6 +3,7 @@ package com.processing.api.support;
 import java.math.BigDecimal;
 import java.security.SecureRandom;
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -47,6 +48,8 @@ public final class Data {
 
     public static Map<String, Object> transaction() {
         Map<String, Object> body = authorization("400000" + digits(10));
+        String timestamp = Instant.now().truncatedTo(ChronoUnit.MICROS).toString();
+        body.put("transmissionDateTime", timestamp);
         body.put("id", UUID.randomUUID().toString());
         body.put("rrn", digits(12));
         body.put("status", "APPROVED");
@@ -54,7 +57,7 @@ public final class Data {
         body.put("authCode", "ABC123");
         body.put("processingTimeMs", 1);
         body.put("acquiringFee", 0);
-        body.put("createdAt", body.get("transmissionDateTime"));
+        body.put("createdAt", timestamp);
         return body;
     }
 }
